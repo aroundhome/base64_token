@@ -1,8 +1,7 @@
 # Base64Token
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/base64_token`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem allows you to take a ruby hash and turn it into an encrypted token
+that you can later convert back to your original hash.
 
 ## Installation
 
@@ -22,15 +21,32 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+````ruby
+# Set the encryption key used for your token. You should store that somewhere
+# if you want to recognize your own tokens at a later time.
+Base64Token.encryption_key = Base64Token.generate_key
+=> "BgPrrt4Ltd7rYlsloSEs+cVuxcaLdjkTRFAjKWViIWo=\n"
+
+token = Base64Token.generate(user_id: 42, valid_to: '2017-01-19T13:37:00')
+=> "fTsJg-2iOA5F3YC2i5tlGcWUE-npnZwSEezA-yRfhLL8aV_KE6AuGIZH5YAdgE-lLhiNUmuWCFkxlgUJy7TjdmJFscxzeS-l3CTD1or6nwR0-zHA7B-Q"
+
+Base64Token.parse(token)
+=> {:user_id=>42, :valid_to=>"2017-01-19T13:37:00"}
+````
+
+Note that:
+
+* your hash is converted to JSON intermediately, so you can (re)store anything
+  that you can serialize to JSON
+* to ensure consistency before and after deserialization, all hash keys have to be
+  symbols
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+You can run `bin/console` for an interactive prompt that will allow you to experiment.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/base64_token.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/kaeuferportal/base64_token.
