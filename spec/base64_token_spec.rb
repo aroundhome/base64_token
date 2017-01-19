@@ -2,6 +2,10 @@
 require 'spec_helper'
 
 describe Base64Token do
+  before do
+    described_class.encryption_key = described_class.generate_key
+  end
+
   it 'is able to perform a full roundtrip for a hash' do
     before = { foo: 'bar' }
     after = described_class.parse(described_class.generate(before))
@@ -20,6 +24,17 @@ describe Base64Token do
       expect { described_class.generate('foo' => 'bar') }
         .to raise_error(ArgumentError)
     end
+
+    context ' when no encryption key is set' do
+      before do
+        described_class.encryption_key = nil
+      end
+
+      it 'raises an error' do
+        expect { described_class.generate(foo: 'bar') }
+          .to raise_error(Base64Token::ConfigurationError)
+      end
+    end
   end
 
   describe '#parse' do
@@ -29,6 +44,17 @@ describe Base64Token do
 
     it 'returns an empty hash for an empty string' do
       expect(described_class.parse('')).to eql({})
+    end
+
+    context ' when no encryption key is set' do
+      before do
+        described_class.encryption_key = nil
+      end
+
+      it 'raises an error' do
+        expect { described_class.parse('abc') }
+          .to raise_error(Base64Token::ConfigurationError)
+      end
     end
   end
 end

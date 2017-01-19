@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'base64'
 require 'base64_token/version'
 require 'json'
 
@@ -6,8 +7,8 @@ require 'rbnacl/libsodium'
 require 'rbnacl'
 
 module Base64Token
-  class Error < StandardError
-  end
+  class Error < StandardError; end
+  class ConfigurationError < StandardError; end
 
   class << self
     def generate(**hash)
@@ -20,7 +21,16 @@ module Base64Token
       return {} if !token || token.strip.empty?
       cipher = base64_decode(token)
       json = decrypt(cipher)
-      JSON.parse(json).symbolize_keys
+      JSON.parse(json).map { |k, v| [k.to_sym, v] }.to_h
+    end
+
+    def generate_key
+      Base64.encode64(RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes))
+    end
+
+    def encryption_key=(key)
+      @encryption_key = key
+      @crypto_box = nil
     end
 
     private
@@ -42,13 +52,13 @@ module Base64Token
     end
 
     def crypto_box
-      RbNaCl::SimpleBox.from_secret_key(key)
-    end
+      @crypto_box ||= begin
+        unless @encryption_key
+          raise ConfigurationError, 'Encryption key not set.'
+        end
 
-    def key
-      @key ||= begin
-        config = YAML.load_file('config/base64_token.yml')[Rails.env]
-        Base64.decode64(config['secret_key'])
+        key = Base64.decode64(@encryption_key)
+        RbNaCl::SimpleBox.from_secret_key(key)
       end
     end
   end
