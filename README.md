@@ -11,7 +11,7 @@ that you can later convert back to your original hash.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'base64_token'
+gem 'base64_token', '~> 1.0'
 ```
 
 And then execute:
