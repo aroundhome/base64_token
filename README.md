@@ -1,3 +1,6 @@
+[![Gem Version](https://badge.fury.io/rb/base64_token.svg)](https://badge.fury.io/rb/base64_token)
+[![Build Status](https://travis-ci.org/kaeuferportal/base64_token.svg?branch=master)](https://travis-ci.org/kaeuferportal/base64_token)
+
 # Base64Token
 
 This gem allows you to take a ruby hash and turn it into an encrypted token
