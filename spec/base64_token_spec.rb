@@ -46,6 +46,16 @@ describe Base64Token do
       expect(described_class.parse('')).to eql({})
     end
 
+    it 'raises an error for invalid Base64' do
+      expect { described_class.parse('xxxxxxxxxxxxxx') }
+        .to raise_error(Base64Token::Error)
+    end
+
+    it 'raises an error for invalid crypto box' do
+      expect { described_class.parse('SSBhbSBwbGFpbiB0ZXh0') }
+        .to raise_error(Base64Token::Error)
+    end
+
     context ' when no encryption key is set' do
       before do
         described_class.encryption_key = nil

@@ -47,7 +47,7 @@ module Base64Token
 
     def decrypt(ciphertext)
       crypto_box.decrypt(ciphertext)
-    rescue RbNaCl::CryptoError => e
+    rescue RbNaCl::CryptoError, RbNaCl::LengthError => e
       raise Error, e.message
     end
 
