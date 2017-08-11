@@ -6,6 +6,8 @@
 This gem allows you to take a ruby hash and turn it into an encrypted token
 that you can later convert back to your original hash.
 
+The contents of the tokenized hash are encrypted, so the bearer of the token will not be able to see or modify the contents of the hash.
+
 ## Installation
 
 Add this line to your application's Gemfile:
