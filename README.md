@@ -30,7 +30,7 @@ Or install it yourself as:
 # Set the encryption key used for your token. You should store that somewhere
 # if you want to recognize your own tokens at a later time.
 Base64Token.encryption_key = Base64Token.generate_key
-=> "BgPrrt4Ltd7rYlsloSEs+cVuxcaLdjkTRFAjKWViIWo=\n"
+=> "BgPrrt4Ltd7rYlsloSEs+cVuxcaLdjkTRFAjKWViIWo="
 
 token = Base64Token.generate(user_id: 42, valid_to: '2017-01-19T13:37:00')
 => "fTsJg-2iOA5F3YC2i5tlGcWUE-npnZwSEezA-yRfhLL8aV_KE6AuGIZH5YAdgE-lLhiNUmuWCFkxlgUJy7TjdmJFscxzeS-l3CTD1or6nwR0-zHA7B-Q"

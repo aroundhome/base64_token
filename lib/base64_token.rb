@@ -25,7 +25,9 @@ module Base64Token
     end
 
     def generate_key
-      Base64.encode64(RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes))
+      Base64.strict_encode64(
+        RbNaCl::Random.random_bytes(RbNaCl::SecretBox.key_bytes)
+      )
     end
 
     def encryption_key=(key)
