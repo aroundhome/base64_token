@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Base64Token do
@@ -36,7 +37,7 @@ describe Base64Token do
   end
 
   describe '#generate' do
-    context ' when no encryption key is set' do
+    context 'when no encryption key is set' do
       before do
         described_class.encryption_key = nil
       end
@@ -67,7 +68,7 @@ describe Base64Token do
         .to raise_error(Base64Token::Error)
     end
 
-    context ' when no encryption key is set' do
+    context 'when no encryption key is set' do
       before do
         described_class.encryption_key = nil
       end
