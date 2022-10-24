@@ -1,9 +1,9 @@
 # frozen_string_literal: true
+
 require 'base64'
 require 'base64_token/version'
 require 'json'
 
-require 'rbnacl/libsodium'
 require 'rbnacl'
 
 module Base64Token
@@ -19,9 +19,10 @@ module Base64Token
 
     def parse(token)
       return {} if !token || token.strip.empty?
+
       cipher = base64_decode(token)
       json = decrypt(cipher)
-      JSON.parse(json).map { |k, v| [k.to_sym, v] }.to_h
+      JSON.parse(json).transform_keys(&:to_sym)
     end
 
     def generate_key
@@ -55,9 +56,7 @@ module Base64Token
 
     def crypto_box
       @crypto_box ||= begin
-        unless @encryption_key
-          raise ConfigurationError, 'Encryption key not set.'
-        end
+        raise ConfigurationError, 'Encryption key not set.' unless @encryption_key
 
         key = Base64.decode64(@encryption_key)
         RbNaCl::SimpleBox.from_secret_key(key)

@@ -1,0 +1,42 @@
+image: ruby:3.1
+
+stages:
+  - test
+  - publish
+
+before_script:
+  - bundle config jobs 8
+  - bundle install --path=/tmp/bundler --quiet
+  - apt update && apt install -y libsodium-dev
+
+rubocop:
+  stage: test
+  image: ruby:2.7
+  script:
+    - bundle exec rubocop
+
+rspec_2.7:
+  stage: test
+  image: ruby:2.7
+  script:
+    - bundle exec rspec
+
+rspec:
+  stage: test
+  script:
+    - bundle exec rspec
+
+publish_gem:
+  stage: publish
+  script:
+    - mkdir -p ~/.gem
+    - |
+      cat << EOF > ~/.gem/credentials
+      ---
+      :rubygems_api_key: ${RUBYGEMS_API_KEY}
+      EOF
+    - chmod 0600 ~/.gem/credentials
+    - gem build environment_config.gemspec
+    - gem push $(find `pwd` -name "environment_config-*.gem")
+  only:
+    - main
