@@ -36,7 +36,7 @@ publish_gem:
       :rubygems_api_key: ${RUBYGEMS_API_KEY}
       EOF
     - chmod 0600 ~/.gem/credentials
-    - gem build environment_config.gemspec
-    - gem push $(find `pwd` -name "environment_config-*.gem")
+    - gem build base64_token.gemspec
+    - gem push $(find `pwd` -name "base64_token-*.gem")
   only:
     - main
