@@ -7,13 +7,13 @@ describe Base64Token do
   shared_examples 'valid encryption key' do
     it 'is able to perform a full roundtrip for a hash' do
       before = { foo: 'bar' }
-      after = described_class.parse(described_class.generate(before))
+      after = described_class.parse(described_class.generate(**before))
       expect(after).to eql(before)
     end
 
     it 'raises for a tampered token' do
       before = { foo: 'bar' }
-      token = described_class.generate(before)
+      token = described_class.generate(**before)
       token.insert(5, '1337')
       expect { described_class.parse(token) }.to raise_error(Base64Token::Error)
     end
@@ -36,11 +36,6 @@ describe Base64Token do
   end
 
   describe '#generate' do
-    it 'rejects non-symbol keys' do
-      expect { described_class.generate('foo' => 'bar') }
-        .to raise_error(ArgumentError)
-    end
-
     context ' when no encryption key is set' do
       before do
         described_class.encryption_key = nil

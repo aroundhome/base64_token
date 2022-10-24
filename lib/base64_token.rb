@@ -3,7 +3,6 @@ require 'base64'
 require 'base64_token/version'
 require 'json'
 
-require 'rbnacl/libsodium'
 require 'rbnacl'
 
 module Base64Token
